@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RecolectResource : MonoBehaviour {
 
     private IA iA;
+    private Text resourceText;
     [SerializeField]
     private Transform recolectTarget;
     [SerializeField]
@@ -12,10 +14,12 @@ public class RecolectResource : MonoBehaviour {
     [SerializeField]
     private float velMov;
     private int cantResource;
+    private string tipeResource;
 
     void Awake ()
     {
         iA = GetComponent<IA>();
+        resourceText = GameObject.Find("GoldText").GetComponent<Text>();
 	}
     void Start()
     {
@@ -41,7 +45,7 @@ public class RecolectResource : MonoBehaviour {
             default:
                 break;
         }
-        if(cantResource > 200)
+        if(cantResource == 200)
             iA.sM.SendEvent(2);
         if(cantResource < 0)
         {
@@ -65,11 +69,15 @@ public class RecolectResource : MonoBehaviour {
     void Deposit()
     {
         cantResource--;
+        resourceText.text = "" + (199 - cantResource);
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.tag == "Resource")
+        if (collision.gameObject.layer == 8)     // 8 = Resource
+        {
             iA.sM.SendEvent(1);
+            tipeResource = collision.gameObject.tag;
+        }
         if (collision.gameObject.tag == "Deposit")
             iA.sM.SendEvent(3);
     }
