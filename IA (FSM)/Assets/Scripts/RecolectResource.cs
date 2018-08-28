@@ -47,7 +47,7 @@ public class RecolectResource : MonoBehaviour {
         }
         if(cantResource == 200)
             iA.sM.SendEvent(2);
-        if(cantResource < 0)
+        if(cantResource < 1)
         {
             cantResource = 0;
             iA.sM.SendEvent(0);
@@ -69,7 +69,7 @@ public class RecolectResource : MonoBehaviour {
     void Deposit()
     {
         cantResource--;
-        resourceText.text = "" + (199 - cantResource);
+        resourceText.text = "" + (200 - cantResource);
     }
     private void OnCollisionEnter(Collision collision)
     {
