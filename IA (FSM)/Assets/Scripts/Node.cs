@@ -4,9 +4,16 @@ using UnityEngine;
 
 public class Node
 {
-    List<Node> adj;
-    Node parent;
-    float cost;
-    float totalCost;
-    bool open = false;
+    public Node[] adj;
+    public Node parent;
+    public Vector3 position;
+    public float cost;
+    public float totalCost;
+    public bool open = false;
+    public bool close = false;
+
+    public Node()
+    {
+        parent = this;
+    }
 }
