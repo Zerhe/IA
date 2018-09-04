@@ -8,7 +8,7 @@ public class PathFinding
     List<Node> Closed;
     Node nodeActual;
 
-    List<Vector3> GetPath(Node[,] nodes)
+    List<Vector3> GetPath(Node[,] nodes, Vector3 posOrigen, Vector3 posTraget)
     {
         OpenNode(nodes[0, 0]);                       //Nodo de origen
 
@@ -53,7 +53,7 @@ public class PathFinding
     {
         for(int i = 0; i < node.adj.Length; i++)
         {
-            if(!node.open && !node.close)
+            if(!node.open && !node.close && node.walkeable)
             {
                 OpenNode(node.adj[i]);
                 node.adj[i].parent = node;
