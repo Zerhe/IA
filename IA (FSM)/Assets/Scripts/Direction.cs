@@ -15,4 +15,10 @@ public static class Direction
         direction = heading / distance;
         return direction;
     }
+    public static float CalculateDistance(Vector3 targetPosition, Vector3 startPosition)
+    {
+        heading = targetPosition - startPosition;
+        distance = heading.magnitude;
+        return distance;
+    }
 }

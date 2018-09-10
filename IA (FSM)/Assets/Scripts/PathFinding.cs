@@ -6,22 +6,54 @@ public class PathFinding
 {
     List<Node> Opened;
     List<Node> Closed;
+    Node nodeOrigin;
+    Node nodeDestination;
     Node nodeActual;
 
-    List<Vector3> GetPath(Node[,] nodes, Vector3 posOrigen, Vector3 posTraget)
+    List<Vector3> GetPath(Node[,] nodes, Vector3 posOrigin, Vector3 posDestination)
     {
-        OpenNode(nodes[0, 0]);                       //Nodo de origen
+        nodeOrigin = SearchNodeByPosition(nodes, posOrigin);
+        nodeDestination = SearchNodeByPosition(nodes, posDestination);
+
+        OpenNode(nodeOrigin);                                   //Agrego a la lista de nodos abiertos el nodo d eorigen
 
         while(Opened.Count > 0)
         {
             nodeActual = SelectionNodeOpenedList();
-            //if (nodeActual = destino)
+            if (nodeActual == nodeDestination)
                 return CalculePath();
-            //else
+            else
                 OpenAdjacent(nodeActual);
                 ClosedNode(nodeActual);
         }
-        return CalculePath();                                  //No puede ir a ese nodo
+        return CalculePath();                                  //retorno una lista de posiciones, las cuaes forman un camino
+    }
+    Node SearchNodeByPosition(Node[,] nodes, Vector3 pos)
+    {
+        Node node = new Node();
+        float minDistance = -1;
+        float distance;
+
+        for(int i = 0; i < nodes.GetLength(0); i++)
+        {
+            for(int j = 0; j < nodes.GetLength(1); j++)
+            {
+                if (minDistance != -1)
+                {
+                    distance = Direction.CalculateDistance(nodes[i, j].position, pos);
+
+                    if(distance < minDistance)
+                    {
+                        minDistance = distance;
+                        node = nodes[i, j];
+                    }
+
+                }
+                else
+                    minDistance = Direction.CalculateDistance(nodes[i, j].position, pos);
+            }
+        }
+        return node;
     }
     void OpenNode(Node node)
     {

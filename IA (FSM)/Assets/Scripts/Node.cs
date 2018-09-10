@@ -7,7 +7,6 @@ public class Node
     public Node[] adj;
     public Node parent;
     public Vector3 position;
-    public float radio;
     public float cost;
     public float totalCost;
     public bool open = false;
