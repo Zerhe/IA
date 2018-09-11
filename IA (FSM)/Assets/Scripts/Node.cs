@@ -16,9 +16,25 @@ public class Node
     public Node()
     {
         parent = this;
-        if(Physics.CheckSphere(position, 0.1f, 9))
+
+    }
+    public void CheckObstaculeInThisNode(float heightRay, int layerObstacle)
+    {
+        Vector3 originRay = position;
+        originRay.y += heightRay;
+        float maxDistanceRay = originRay.y - position.y;
+
+        RaycastHit hit;
+        if(Physics.Raycast(originRay, Vector3.down, out hit, maxDistanceRay))
         {
-            walkeable = false;
+            if(hit.collider.gameObject.layer == layerObstacle)
+            {
+                walkeable = false;
+            }
+            else
+                walkeable = true;
         }
+        Debug.Log(walkeable);
+        Debug.DrawRay(originRay, Vector3.down * maxDistanceRay, Color.red);
     }
 }

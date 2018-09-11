@@ -140,8 +140,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e377d767656c0542868d55bc5e7a223, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distanceNodes: 3
-  gridWorldSize: {x: 10, y: 10}
+  distanceNodes: 1
+  gridWorldSize: {x: 9, y: 9}
+  previewNode: {fileID: 1283939150013244, guid: a009538f212c9dd41a23b281883fd6ce,
+    type: 2}
+  layerObstacle: 9
+  heightObstacleDetection: 1
 --- !u!4 &267172112
 Transform:
   m_ObjectHideFlags: 0
@@ -149,7 +153,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 267172110}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalPosition: {x: -5, y: 0.5, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -232,9 +236,9 @@ GameObject:
   - component: {fileID: 1118897376}
   - component: {fileID: 1118897375}
   - component: {fileID: 1118897374}
-  m_Layer: 0
-  m_Name: Cube (4)
-  m_TagString: Untagged
+  m_Layer: 9
+  m_Name: Obstacule
+  m_TagString: Obstacle
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -300,8 +304,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1118897373}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.25, y: 0.84, z: -2.841}
-  m_LocalScale: {x: 0.2, y: 1, z: 4}
+  m_LocalPosition: {x: 0.22, y: 1, z: 0.09}
+  m_LocalScale: {x: 2, y: 1, z: 4}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
@@ -386,7 +390,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1744244530}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.82, y: 0.8, z: -1.791}
+  m_LocalPosition: {x: -3.21, y: 0.7, z: -1.07}
   m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_Children: []
   m_Father: {fileID: 0}

@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Grid : MonoBehaviour {
+public class Grid : MonoBehaviour
+{
 
     Node[,] nodes;
     [SerializeField]
@@ -11,6 +12,12 @@ public class Grid : MonoBehaviour {
     Vector2 gridWorldSize;
     int gridSizeX;
     int gridSizeY;
+    [SerializeField]
+    GameObject previewNode;
+    [SerializeField]
+    int layerObstacle;
+    [SerializeField]
+    float heightObstacleDetection;
 
     void Awake()
     {
@@ -18,32 +25,33 @@ public class Grid : MonoBehaviour {
         gridSizeY = Mathf.RoundToInt(gridWorldSize.y / distanceNodes);
         nodes = new Node[gridSizeX, gridSizeY];
     }
-    void Start () 
+    void Start()
     {
-        bool startNode = true;
 
         for(int i = 0; i < nodes.GetLength(0); i++)
         {
             for(int j = 0; j < nodes.GetLength(1); j++)
             {
-                if(startNode != true)
-                {
-                    nodes[i, j].position.x += distanceNodes * i;
-                    nodes[i, j].position.y += distanceNodes * j;
-                    nodes[i, j].position.z += transform.position.z;
-                }
-                else
-                {
-                    nodes[i, j].position = transform.position;
-                    startNode = false;
-                }
-                nodes[i, j].cost = distanceNodes;
+                nodes[i, j] = new Node();
+                nodes[i, j].position = transform.position;
+                nodes[i, j].position.x += distanceNodes * (i+1);
+                nodes[i, j].position.y = transform.position.y;
+                nodes[i, j].position.z += distanceNodes * (j+1);
+                nodes[i, j].cost = distanceNodes;                                                          //le asigno el costo de moverse basado en la distancia entre los nodos
+
+                Instantiate(previewNode, nodes[i, j].position, transform.rotation);
             }
         }
-	}
+    }
 
-	void Update ()
+    void Update()
     {
-		
-	}
+        for(int i = 0; i < nodes.GetLength(0); i++)
+        {
+            for(int j = 0; j < nodes.GetLength(1); j++)
+            {
+                nodes[i, j].CheckObstaculeInThisNode(heightObstacleDetection, layerObstacle);
+            }
+        }
+    }
 }
