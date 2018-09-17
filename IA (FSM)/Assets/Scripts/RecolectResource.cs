@@ -15,11 +15,14 @@ public class RecolectResource : MonoBehaviour {
     private float velMov;
     private int cantResource;
     private string tipeResource;
+    private GridNodes grid;
+    private int pathNum = 0;
 
     void Awake ()
     {
         iA = GetComponent<IA>();
         resourceText = GameObject.Find("GoldText").GetComponent<Text>();
+        grid = GameObject.Find("GridObject").GetComponent<GridNodes>();
 	}
     void Start()
     {
@@ -56,7 +59,8 @@ public class RecolectResource : MonoBehaviour {
     }
     void MovToRecolect()
     {
-        transform.Translate(Direction.CalculateDirection(recolectTarget.position, transform.position) * Time.deltaTime * velMov);
+        //transform.Translate(Direction.CalculateDirection(recolectTarget.position, transform.position) * Time.deltaTime * velMov);
+        PathFinding.GetPath(grid.GetNodes(), transform.position, recolectTarget.position);
     }
     void Recolect()
     {
@@ -64,7 +68,7 @@ public class RecolectResource : MonoBehaviour {
     }
     void MovToDeposit()
     {
-        transform.Translate(Direction.CalculateDirection(depositTarget.position, transform.position) * Time.deltaTime * velMov * 0.5f);
+        //transform.Translate(Direction.CalculateDirection(depositTarget.position, transform.position) * Time.deltaTime * velMov * 0.5f);
     }
     void Deposit()
     {
@@ -80,5 +84,16 @@ public class RecolectResource : MonoBehaviour {
         }
         if (collision.gameObject.tag == "Deposit")
             iA.sM.SendEvent(3);
+    }
+    void MovPath(List<Vector3> path)
+    {
+        if(pathNum < path.Count)
+        {
+            if(path[pathNum] == transform.position)
+            {
+                pathNum++;
+            }
+            transform.Translate(Direction.CalculateDirection(path[pathNum], transform.position));
+        }
     }
 }

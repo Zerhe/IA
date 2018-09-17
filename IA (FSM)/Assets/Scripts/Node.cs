@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Node
 {
-    public Node[] adj;
+    public List<Node> adj;
     public Node parent;
     public Vector3 position;
     public float cost;
@@ -16,6 +16,7 @@ public class Node
     public Node()
     {
         parent = this;
+        adj = new List<Node>();
 
     }
     public void CheckObstaculeInThisNode(float heightRay, int layerObstacle)
@@ -34,7 +35,7 @@ public class Node
             else
                 walkeable = true;
         }
-        Debug.Log(walkeable);
-        Debug.DrawRay(originRay, Vector3.down * maxDistanceRay, Color.red);
+        //Debug.Log(walkeable);
+        //Debug.DrawRay(originRay, Vector3.down * maxDistanceRay, Color.red);
     }
 }
