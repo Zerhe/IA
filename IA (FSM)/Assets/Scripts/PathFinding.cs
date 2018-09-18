@@ -26,7 +26,7 @@ public static class PathFinding
                 OpenAdjacent(nodeActual);
                 ClosedNode(nodeActual);
         }*/
-        nodeActual = SelectionNodeOpenedList();
+        nodeActual = SelectionNodeOpenedList();                              //esta linea no va
         return CalculePath(posDestination);                                  //retorno una lista de posiciones, las cuaes forman un camino
     }
     public static Node SearchNodeByPosition(Node[,] nodes, Vector3 pos)
@@ -94,5 +94,19 @@ public static class PathFinding
                 adj.parent = node;
             }
         }
+    }
+    public static void MovPath(List<Vector3> path, Transform transform, float velMov)
+    {
+        if(path.Count > 0)
+        {
+            if(Mathf.RoundToInt(Direction.CalculateDistance( path[path.Count - 1], transform.position)) == 0)
+            {
+                path.RemoveAt(path.Count - 1);
+            }
+            transform.Translate(Direction.CalculateDirection(path[path.Count-1], transform.position) * Time.deltaTime * velMov);
+            //print(Direction.CalculateDirection(path[path.Count - 1], transform.position));
+            Debug.Log(path[path.Count - 1]);
+        }
+        Debug.Log("asdasd");
     }
 }

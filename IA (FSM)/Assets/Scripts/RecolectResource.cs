@@ -16,13 +16,15 @@ public class RecolectResource : MonoBehaviour {
     private int cantResource;
     private string tipeResource;
     private GridNodes grid;
-    private int pathNum = 0;
+    private bool searchPath = true;
+    private List<Vector3> path;
 
     void Awake ()
     {
         iA = GetComponent<IA>();
         resourceText = GameObject.Find("GoldText").GetComponent<Text>();
         grid = GameObject.Find("GridObject").GetComponent<GridNodes>();
+        path = new List<Vector3>();
 	}
     void Start()
     {
@@ -30,7 +32,7 @@ public class RecolectResource : MonoBehaviour {
     }
     void Update ()
     {
-        print(cantResource);
+        //print(cantResource);
 		switch(iA.sM.GetState())
         {
             case 1:
@@ -60,7 +62,12 @@ public class RecolectResource : MonoBehaviour {
     void MovToRecolect()
     {
         //transform.Translate(Direction.CalculateDirection(recolectTarget.position, transform.position) * Time.deltaTime * velMov);
-        PathFinding.GetPath(grid.GetNodes(), transform.position, recolectTarget.position);
+        if(searchPath)
+        {
+            path = PathFinding.GetPath(grid.GetNodes(), transform.position, recolectTarget.position);
+            searchPath = false;
+        }
+        PathFinding.MovPath(path, transform, velMov);
     }
     void Recolect()
     {
@@ -85,15 +92,18 @@ public class RecolectResource : MonoBehaviour {
         if (collision.gameObject.tag == "Deposit")
             iA.sM.SendEvent(3);
     }
-    void MovPath(List<Vector3> path)
+    /*void MovPath(List<Vector3> pathh)
     {
-        if(pathNum < path.Count)
+        if(path.Count > 0)
         {
-            if(path[pathNum] == transform.position)
+            if(Mathf.RoundToInt(Direction.CalculateDistance( path[path.Count - 1], transform.position)) == 0)
             {
-                pathNum++;
+                path.RemoveAt(path.Count - 1);
             }
-            transform.Translate(Direction.CalculateDirection(path[pathNum], transform.position));
+            transform.Translate(Direction.CalculateDirection(path[path.Count-1], transform.position) * Time.deltaTime * velMov);
+            //print(Direction.CalculateDirection(path[path.Count - 1], transform.position));
+            print(path[path.Count - 1]);
         }
-    }
+        print("asdasd");
+    }*/
 }
