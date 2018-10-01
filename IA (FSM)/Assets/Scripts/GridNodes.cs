@@ -41,6 +41,7 @@ public class GridNodes : MonoBehaviour
                 nodes[i, j].position.y = transform.position.y;
                 nodes[i, j].position.z += distanceNodes * (j+1);
                 nodes[i, j].cost = distanceNodes;                                                          //le asigno el costo de moverse basado en la distancia entre los nodos
+                nodes[i, j].totalCost = nodes[i, j].cost;
 
                 viewNodes.Add(Instantiate(previewNode, nodes[i, j].position, transform.rotation));         //Instancio objetos en las posiciones de los nodos para tener una referencia
             }
@@ -88,8 +89,8 @@ public class GridNodes : MonoBehaviour
                    j >= gridPosY - 1 && j <= gridPosY + 1 && 
                    !(i == gridPosX && j == gridPosY))
                 {
-                    node.adj.Add(nodes[i, j]);
-                    //print("node" + "(" + gridPosX + "," + gridPosY + ") :" + "(" + i + "," + j + ")");
+                    if (!Physics.Linecast(node.position, nodes[i, j].position))                 // tira un rayo para ver sino hay obstaculos entre los nodos
+                        node.adj.Add(nodes[i, j]);                   
                 }
             }
         }

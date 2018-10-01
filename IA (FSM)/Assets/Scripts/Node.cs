@@ -38,4 +38,12 @@ public class Node
         //Debug.Log(walkeable);
         //Debug.DrawRay(originRay, Vector3.down * maxDistanceRay, Color.red);
     }
+    public void SetOpen(bool val)
+    {
+        open = val;
+    }
+    public void SetClose(bool val)
+    {
+        close = val;
+    }
 }

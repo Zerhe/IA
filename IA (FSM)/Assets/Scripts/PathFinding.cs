@@ -17,17 +17,29 @@ public static class PathFinding
 
         OpenNode(nodeOrigin);                                   //Agrego a la lista de nodos abiertos el nodo d eorigen
 
-        /*while(Opened.Count > 0)
+        while(Opened.Count > 0)
         {
+            //Debug.Log("Open : " + Opened.Count);
             nodeActual = SelectionNodeOpenedList();
+            Debug.Log(nodeActual.totalCost);
             if (nodeActual == nodeDestination)
+            {
+                Debug.Log("EncontreElDestino");
+                CleanLists();               
                 return CalculePath(posDestination);
+            }
             else
+            {
                 OpenAdjacent(nodeActual);
                 ClosedNode(nodeActual);
-        }*/
-        nodeActual = SelectionNodeOpenedList();                              //esta linea no va
-        return CalculePath(posDestination);                                  //retorno una lista de posiciones, las cuaes forman un camino
+            }
+            Debug.Log("Open : " + Opened.Count);
+        }
+        //nodeActual = SelectionNodeOpenedList();                              //esta linea no va
+        //ClosedNode(nodeActual);                                              //esta tampoco xd
+        Debug.Log("NoEncontreElDestino");
+        CleanLists();
+        return CalculePath(posDestination); //sacar que valla al destino      //sino encuentro el nodo final devuelvo un camino hasta el ultimo nodo que busque
     }
     public static Node SearchNodeByPosition(Node[,] nodes, Vector3 pos)
     {
@@ -59,16 +71,32 @@ public static class PathFinding
     public static void OpenNode(Node node)
     {
         Opened.Add(node);
+        node.SetOpen(true);
     }
     public static void ClosedNode(Node node)
     {
         Opened.Remove(node);
+        node.SetOpen(false);
         Closed.Add(node);
+        node.SetClose(true);
     }
     public static Node SelectionNodeOpenedList()                   //De que parte de la lista de nodos abiertos saca el nodo
     {
-        Node node = Opened[0];            
-        return node;
+        Node nodeMinCost = new Node();
+        bool firstSearch = true;
+
+        foreach(Node node in Opened)
+        {
+            if (firstSearch)
+            {
+                nodeMinCost = node;
+                firstSearch = false;
+            }
+            else if (node.totalCost <= nodeMinCost.totalCost)
+                nodeMinCost = node;
+        }
+                return nodeMinCost;
+        //Node node = Opened[0];            
     }
     public static List<Vector3> CalculePath(Vector3 posDestination)
     {
@@ -81,6 +109,7 @@ public static class PathFinding
             path.Add(node.position);
             node = node.parent;
         }
+        //Debug.Log("ultimoNodo");
         path.Add(node.position);
         return path;
     }
@@ -91,8 +120,22 @@ public static class PathFinding
             if(!adj.open && !adj.close && adj.walkeable)
             {
                 OpenNode(adj);
+                adj.totalCost += node.totalCost;
                 adj.parent = node;
             }
+        }
+    }
+    public static void CleanLists()
+    {
+        while (Opened.Count > 0)
+        {
+            Opened[0].SetOpen(false);
+            Opened.RemoveAt(0);
+        }
+        while (Closed.Count > 0)
+        {
+            Closed[0].SetClose(false);
+            Closed.RemoveAt(0);
         }
     }
     public static void MovPath(List<Vector3> path, Transform transform, float velMov)
@@ -105,8 +148,8 @@ public static class PathFinding
             }
             transform.Translate(Direction.CalculateDirection(path[path.Count-1], transform.position) * Time.deltaTime * velMov);
             //print(Direction.CalculateDirection(path[path.Count - 1], transform.position));
-            Debug.Log(path[path.Count - 1]);
+            //Debug.Log(path[path.Count - 1]);
         }
-        Debug.Log("asdasd");
+        //Debug.Log("asdasd");
     }
 }
