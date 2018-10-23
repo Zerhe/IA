@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class Boid : MonoBehaviour {
 
-    List<Boid> visiblesBoids;
+    [HideInInspector]
+    public List<Boid> visibleBoids;
     Vector3 directionMov;
     Vector3 destinyPosition;
     [SerializeField]
