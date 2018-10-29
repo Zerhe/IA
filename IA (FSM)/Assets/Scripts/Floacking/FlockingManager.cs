@@ -4,13 +4,21 @@ using UnityEngine;
 
 public class FlockingManager : MonoBehaviour
 {
-
-    List<Boid> boids;
+    [HideInInspector]
+    public List<Boid> boids;
+    [SerializeField]
     float distanceVisibleBoid;
+    Vector3 cohesion, separation, alineation;
+    [SerializeField]
+    float wCohesion, wSeparation, wAlineation;
 
+    private void Awake()
+    {
+        boids = new List<Boid>();
+    }
     void Start()
     {
-
+        cohesion = separation = alineation = Vector3.zero;
     }
     void Update()
     {
@@ -18,11 +26,13 @@ public class FlockingManager : MonoBehaviour
         {
             foreach (Boid b2 in boids)
             {
+                //print("asd");
                 if (b == b2)
                     continue;
                 if (Direction.CalculateDistance(b2.transform.position, b.transform.position) < distanceVisibleBoid)
                 {
                     b.visibleBoids.Add(b2);
+                    print("agregado");
                 }
                 else
                 {
@@ -33,20 +43,32 @@ public class FlockingManager : MonoBehaviour
         }
     }
 
-    Vector3 CalculateCohesion()
+    public Vector3 CalculateCohesion(Boid b)
     {
-
+        foreach (Boid boid in b.visibleBoids)
+        {
+            cohesion += boid.transform.position;
+        }
+        cohesion = cohesion / b.visibleBoids.Count;
+        cohesion = Direction.CalculateDirection(cohesion, transform.position);
+        return cohesion;
     }
-    Vector3 CalculateSeparation()
+    public Vector3 CalculateSeparation(Boid b)
     {
-
+        return -cohesion;
     }
-    Vector3 CalculateAlineation()
+    public Vector3 CalculateAlineation(Boid b)
     {
-        
+        foreach (Boid boid in b.visibleBoids)
+        {
+            alineation += boid.transform.forward;
+        }
+        alineation = Direction.CalculateDirection(alineation, transform.position);
+        return alineation;
     }
-    Vector3 CalculateResultant()
+    public Vector3 CalculateResultant(Boid b)
     {
-        Vector3 resultant = (CalculateCohesion() + CalculateSeparation() + CalculateAlineation()).normalized;
+        Vector3 resultant = (CalculateCohesion(b) * wCohesion + CalculateSeparation(b) * wSeparation + CalculateAlineation(b) * wAlineation);
+        return resultant;
     }
 }
