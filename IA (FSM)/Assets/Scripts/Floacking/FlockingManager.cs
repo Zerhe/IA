@@ -8,7 +8,6 @@ public class FlockingManager : MonoBehaviour
     public List<Boid> boids;
     [SerializeField]
     float distanceVisibleBoid;
-    Vector3 cohesion, separation, alineation;
     [SerializeField]
     float wCohesion, wSeparation, wAlineation;
 
@@ -18,7 +17,7 @@ public class FlockingManager : MonoBehaviour
     }
     void Start()
     {
-        cohesion = separation = alineation = Vector3.zero;
+
     }
     void Update()
     {
@@ -45,30 +44,29 @@ public class FlockingManager : MonoBehaviour
 
     public Vector3 CalculateCohesion(Boid b)
     {
+        Vector3 cohesion = Vector3.zero;
         foreach (Boid boid in b.visibleBoids)
         {
             cohesion += boid.transform.position;
         }
         cohesion = cohesion / b.visibleBoids.Count;
-        cohesion = Direction.CalculateDirection(cohesion, transform.position);
+        cohesion.Normalize();
         return cohesion;
-    }
-    public Vector3 CalculateSeparation(Boid b)
-    {
-        return -cohesion;
     }
     public Vector3 CalculateAlineation(Boid b)
     {
+        Vector3 alineation = Vector3.zero;
+
         foreach (Boid boid in b.visibleBoids)
         {
             alineation += boid.transform.forward;
         }
-        alineation = Direction.CalculateDirection(alineation, transform.position);
+        alineation.Normalize();
         return alineation;
     }
     public Vector3 CalculateResultant(Boid b)
     {
-        Vector3 resultant = (CalculateCohesion(b) * wCohesion + CalculateSeparation(b) * wSeparation + CalculateAlineation(b) * wAlineation);
+        Vector3 resultant = (CalculateCohesion(b) * wCohesion + -CalculateCohesion(b) * wSeparation + CalculateAlineation(b) * wAlineation).normalized;
         return resultant;
     }
 }
