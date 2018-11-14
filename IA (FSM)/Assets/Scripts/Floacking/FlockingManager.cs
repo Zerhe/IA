@@ -31,7 +31,7 @@ public class FlockingManager : MonoBehaviour
                 if (Direction.CalculateDistance(b2.transform.position, b.transform.position) < distanceVisibleBoid)
                 {
                     b.visibleBoids.Add(b2);
-                    print("agregado");
+                    //print("agregado");
                 }
                 else
                 {
@@ -48,9 +48,19 @@ public class FlockingManager : MonoBehaviour
         foreach (Boid boid in b.visibleBoids)
         {
             cohesion += boid.transform.position;
+            if (Direction.CalculateDistance(boid.transform.position, b.transform.position) > 10)
+            {
+                wCohesion = 1.5f;
+                wSeparation = 1;
+            }
+            else if (Direction.CalculateDistance(boid.transform.position, b.transform.position) < 5)
+            {
+                wSeparation = 1.5f;
+                wCohesion = 1;
+            }
         }
         cohesion = cohesion / b.visibleBoids.Count;
-        cohesion.Normalize();
+        cohesion = Direction.CalculateDirection(cohesion, b.transform.position);
         return cohesion;
     }
     public Vector3 CalculateAlineation(Boid b)
@@ -61,7 +71,8 @@ public class FlockingManager : MonoBehaviour
         {
             alineation += boid.transform.forward;
         }
-        alineation.Normalize();
+        alineation = alineation / b.visibleBoids.Count;
+        //alineation = Direction.CalculateDirection(alineation, b.transform.position);
         return alineation;
     }
     public Vector3 CalculateResultant(Boid b)

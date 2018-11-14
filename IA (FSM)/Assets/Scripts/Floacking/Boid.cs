@@ -11,6 +11,7 @@ public class Boid : MonoBehaviour {
     private LookAtPosition lp;
     Vector3 directionMov;
     Vector3 destinyPosition;
+    float inicialYPosition;
     [SerializeField]
     int velMov;
     bool mov = false;
@@ -23,6 +24,7 @@ public class Boid : MonoBehaviour {
     {
         fm.boids.Add(this);
         directionMov = Vector3.zero;
+        inicialYPosition = transform.position.y;
     }
 	
 	void Update ()
@@ -32,13 +34,28 @@ public class Boid : MonoBehaviour {
             destinyPosition = MouseInput.MousePosition();
             destinyPosition.y = transform.position.y;
             lp.SetTargetPosition(destinyPosition);
-
+            //print(gameObject.name + transform.forward);
             directionMov = Direction.CalculateDirection(destinyPosition, transform.position);
             mov = true;
         }
         if (mov)
-            transform.Translate((directionMov + fm.CalculateResultant(this)) * Time.deltaTime * velMov);
-        if (Direction.CalculateDistance(destinyPosition, transform.position) < 1)
-            mov = false;
+        {
+            directionMov = ((directionMov + fm.CalculateResultant(this)) * Time.deltaTime * velMov);
+            directionMov.y = 0;
+            transform.position += directionMov;
+            if (Direction.CalculateDistance(destinyPosition, transform.position) < 2)
+            {
+                print("paroo");
+                mov = false;
+                foreach (Boid b in visibleBoids)
+                {
+                    b.SetMov(false);
+                }
+            }
+        }
+    }
+    public void SetMov(bool mov)
+    {
+        this.mov = mov;
     }
 }
